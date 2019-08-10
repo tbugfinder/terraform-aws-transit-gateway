@@ -1,3 +1,9 @@
+locals {
+  tags = {
+    Name = "${var.scenario}"
+  }
+}
+
 ###############
 # VPC Section #
 ###############
