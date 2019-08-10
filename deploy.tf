@@ -5,54 +5,58 @@
 # VPCs
 
 resource "aws_vpc" "vpc-1" {
-  cidr_block = "10.10.0.0/16"
-  enable_dns_support = true
+  cidr_block           = "10.10.0.0/16"
+  enable_dns_support   = true
   enable_dns_hostnames = true
+
   tags = {
-    Name = "${var.scenario}-vpc1-dev"
+    Name     = "${var.scenario}-vpc1-dev"
     scenario = "${var.scenario}"
-    env = "dev"
+    env      = "dev"
   }
 }
 
 resource "aws_vpc" "vpc-2" {
-  cidr_block = "10.11.0.0/16"
-  enable_dns_support = true
+  cidr_block           = "10.11.0.0/16"
+  enable_dns_support   = true
   enable_dns_hostnames = true
+
   tags = {
-    Name = "${var.scenario}-vpc2-dev"
+    Name     = "${var.scenario}-vpc2-dev"
     scenario = "${var.scenario}"
-    env = "dev"
+    env      = "dev"
   }
 }
 
 resource "aws_vpc" "vpc-3" {
-  cidr_block = "10.12.0.0/16"
-  enable_dns_support = true
+  cidr_block           = "10.12.0.0/16"
+  enable_dns_support   = true
   enable_dns_hostnames = true
+
   tags = {
-    Name = "${var.scenario}-vpc3-shared"
+    Name     = "${var.scenario}-vpc3-shared"
     scenario = "${var.scenario}"
-    env = "shared"
+    env      = "shared"
   }
 }
 
 resource "aws_vpc" "vpc-4" {
-  cidr_block = "10.13.0.0/16"
-  enable_dns_support = true
+  cidr_block           = "10.13.0.0/16"
+  enable_dns_support   = true
   enable_dns_hostnames = true
+
   tags = {
-    Name = "${var.scenario}-vpc4-prod"
+    Name     = "${var.scenario}-vpc4-prod"
     scenario = "${var.scenario}"
-    env = "prod"
+    env      = "prod"
   }
 }
 
 # Subnets
 
 resource "aws_subnet" "vpc-1-sub-a" {
-  vpc_id     = "${aws_vpc.vpc-1.id}"
-  cidr_block = "10.10.1.0/24"
+  vpc_id            = "${aws_vpc.vpc-1.id}"
+  cidr_block        = "10.10.1.0/24"
   availability_zone = "${var.az1}"
 
   tags = {
@@ -61,8 +65,8 @@ resource "aws_subnet" "vpc-1-sub-a" {
 }
 
 resource "aws_subnet" "vpc-1-sub-b" {
-  vpc_id     = "${aws_vpc.vpc-1.id}"
-  cidr_block = "10.10.2.0/24"
+  vpc_id            = "${aws_vpc.vpc-1.id}"
+  cidr_block        = "10.10.2.0/24"
   availability_zone = "${var.az2}"
 
   tags = {
@@ -71,8 +75,8 @@ resource "aws_subnet" "vpc-1-sub-b" {
 }
 
 resource "aws_subnet" "vpc-2-sub-a" {
-  vpc_id     = "${aws_vpc.vpc-2.id}"
-  cidr_block = "10.11.1.0/24"
+  vpc_id            = "${aws_vpc.vpc-2.id}"
+  cidr_block        = "10.11.1.0/24"
   availability_zone = "${var.az1}"
 
   tags = {
@@ -81,8 +85,8 @@ resource "aws_subnet" "vpc-2-sub-a" {
 }
 
 resource "aws_subnet" "vpc-2-sub-b" {
-  vpc_id     = "${aws_vpc.vpc-2.id}"
-  cidr_block = "10.11.2.0/24"
+  vpc_id            = "${aws_vpc.vpc-2.id}"
+  cidr_block        = "10.11.2.0/24"
   availability_zone = "${var.az2}"
 
   tags = {
@@ -91,8 +95,8 @@ resource "aws_subnet" "vpc-2-sub-b" {
 }
 
 resource "aws_subnet" "vpc-3-sub-a" {
-  vpc_id     = "${aws_vpc.vpc-3.id}"
-  cidr_block = "10.12.1.0/24"
+  vpc_id            = "${aws_vpc.vpc-3.id}"
+  cidr_block        = "10.12.1.0/24"
   availability_zone = "${var.az1}"
 
   tags = {
@@ -101,8 +105,8 @@ resource "aws_subnet" "vpc-3-sub-a" {
 }
 
 resource "aws_subnet" "vpc-3-sub-b" {
-  vpc_id     = "${aws_vpc.vpc-3.id}"
-  cidr_block = "10.12.2.0/24"
+  vpc_id            = "${aws_vpc.vpc-3.id}"
+  cidr_block        = "10.12.2.0/24"
   availability_zone = "${var.az2}"
 
   tags = {
@@ -111,8 +115,8 @@ resource "aws_subnet" "vpc-3-sub-b" {
 }
 
 resource "aws_subnet" "vpc-4-sub-a" {
-  vpc_id     = "${aws_vpc.vpc-4.id}"
-  cidr_block = "10.13.1.0/24"
+  vpc_id            = "${aws_vpc.vpc-4.id}"
+  cidr_block        = "10.13.1.0/24"
   availability_zone = "${var.az1}"
 
   tags = {
@@ -121,8 +125,8 @@ resource "aws_subnet" "vpc-4-sub-a" {
 }
 
 resource "aws_subnet" "vpc-4-sub-b" {
-  vpc_id     = "${aws_vpc.vpc-4.id}"
-  cidr_block = "10.13.2.0/24"
+  vpc_id            = "${aws_vpc.vpc-4.id}"
+  cidr_block        = "10.13.2.0/24"
   availability_zone = "${var.az2}"
 
   tags = {
@@ -136,7 +140,7 @@ resource "aws_internet_gateway" "vpc-3-igw" {
   vpc_id = "${aws_vpc.vpc-3.id}"
 
   tags = {
-    Name = "vpc-3-igw"
+    Name     = "vpc-3-igw"
     scenario = "${var.scenario}"
   }
 }
@@ -146,7 +150,7 @@ resource "aws_vpc_endpoint" "ssm1" {
   vpc_id            = "${aws_vpc.vpc-1.id}"
   service_name      = "com.amazonaws.${var.region}.ssm"
   vpc_endpoint_type = "Interface"
-  subnet_ids = ["${aws_subnet.vpc-1-sub-a.id}","${aws_subnet.vpc-1-sub-b.id}"]
+  subnet_ids        = ["${aws_subnet.vpc-1-sub-a.id}", "${aws_subnet.vpc-1-sub-b.id}"]
 
   security_group_ids = [
     "${aws_security_group.sec-group-vpc-1-endpoint.id}",
@@ -159,7 +163,7 @@ resource "aws_vpc_endpoint" "ssm2" {
   vpc_id            = "${aws_vpc.vpc-2.id}"
   service_name      = "com.amazonaws.${var.region}.ssm"
   vpc_endpoint_type = "Interface"
-  subnet_ids = ["${aws_subnet.vpc-2-sub-a.id}","${aws_subnet.vpc-2-sub-b.id}"]
+  subnet_ids        = ["${aws_subnet.vpc-2-sub-a.id}", "${aws_subnet.vpc-2-sub-b.id}"]
 
   security_group_ids = [
     "${aws_security_group.sec-group-vpc-2-endpoint.id}",
@@ -172,7 +176,7 @@ resource "aws_vpc_endpoint" "ssm3" {
   vpc_id            = "${aws_vpc.vpc-3.id}"
   service_name      = "com.amazonaws.${var.region}.ssm"
   vpc_endpoint_type = "Interface"
-  subnet_ids = ["${aws_subnet.vpc-3-sub-a.id}","${aws_subnet.vpc-3-sub-b.id}"]
+  subnet_ids        = ["${aws_subnet.vpc-3-sub-a.id}", "${aws_subnet.vpc-3-sub-b.id}"]
 
   security_group_ids = [
     "${aws_security_group.sec-group-vpc-3-endpoint.id}",
@@ -185,7 +189,7 @@ resource "aws_vpc_endpoint" "ssm4" {
   vpc_id            = "${aws_vpc.vpc-4.id}"
   service_name      = "com.amazonaws.${var.region}.ssm"
   vpc_endpoint_type = "Interface"
-  subnet_ids = ["${aws_subnet.vpc-4-sub-a.id}","${aws_subnet.vpc-4-sub-b.id}"]
+  subnet_ids        = ["${aws_subnet.vpc-4-sub-a.id}", "${aws_subnet.vpc-4-sub-b.id}"]
 
   security_group_ids = [
     "${aws_security_group.sec-group-vpc-4-endpoint.id}",
@@ -198,7 +202,7 @@ resource "aws_vpc_endpoint" "ssmmessages1" {
   vpc_id            = "${aws_vpc.vpc-1.id}"
   service_name      = "com.amazonaws.${var.region}.ssmmessages"
   vpc_endpoint_type = "Interface"
-  subnet_ids = ["${aws_subnet.vpc-1-sub-a.id}","${aws_subnet.vpc-1-sub-b.id}"]
+  subnet_ids        = ["${aws_subnet.vpc-1-sub-a.id}", "${aws_subnet.vpc-1-sub-b.id}"]
 
   security_group_ids = [
     "${aws_security_group.sec-group-vpc-1-endpoint.id}",
@@ -211,7 +215,7 @@ resource "aws_vpc_endpoint" "ssmmessages2" {
   vpc_id            = "${aws_vpc.vpc-2.id}"
   service_name      = "com.amazonaws.${var.region}.ssmmessages"
   vpc_endpoint_type = "Interface"
-  subnet_ids = ["${aws_subnet.vpc-2-sub-a.id}","${aws_subnet.vpc-2-sub-b.id}"]
+  subnet_ids        = ["${aws_subnet.vpc-2-sub-a.id}", "${aws_subnet.vpc-2-sub-b.id}"]
 
   security_group_ids = [
     "${aws_security_group.sec-group-vpc-2-endpoint.id}",
@@ -224,7 +228,7 @@ resource "aws_vpc_endpoint" "ssmmessages3" {
   vpc_id            = "${aws_vpc.vpc-3.id}"
   service_name      = "com.amazonaws.${var.region}.ssmmessages"
   vpc_endpoint_type = "Interface"
-  subnet_ids = ["${aws_subnet.vpc-3-sub-a.id}","${aws_subnet.vpc-3-sub-b.id}"]
+  subnet_ids        = ["${aws_subnet.vpc-3-sub-a.id}", "${aws_subnet.vpc-3-sub-b.id}"]
 
   security_group_ids = [
     "${aws_security_group.sec-group-vpc-3-endpoint.id}",
@@ -237,7 +241,7 @@ resource "aws_vpc_endpoint" "ssmmessages4" {
   vpc_id            = "${aws_vpc.vpc-4.id}"
   service_name      = "com.amazonaws.${var.region}.ssmmessages"
   vpc_endpoint_type = "Interface"
-  subnet_ids = ["${aws_subnet.vpc-4-sub-a.id}","${aws_subnet.vpc-4-sub-b.id}"]
+  subnet_ids        = ["${aws_subnet.vpc-4-sub-a.id}", "${aws_subnet.vpc-4-sub-b.id}"]
 
   security_group_ids = [
     "${aws_security_group.sec-group-vpc-4-endpoint.id}",
@@ -250,7 +254,7 @@ resource "aws_vpc_endpoint" "ec2messages1" {
   vpc_id            = "${aws_vpc.vpc-1.id}"
   service_name      = "com.amazonaws.${var.region}.ec2messages"
   vpc_endpoint_type = "Interface"
-  subnet_ids = ["${aws_subnet.vpc-1-sub-a.id}","${aws_subnet.vpc-1-sub-b.id}"]
+  subnet_ids        = ["${aws_subnet.vpc-1-sub-a.id}", "${aws_subnet.vpc-1-sub-b.id}"]
 
   security_group_ids = [
     "${aws_security_group.sec-group-vpc-1-endpoint.id}",
@@ -263,7 +267,7 @@ resource "aws_vpc_endpoint" "ec2messages2" {
   vpc_id            = "${aws_vpc.vpc-2.id}"
   service_name      = "com.amazonaws.${var.region}.ec2messages"
   vpc_endpoint_type = "Interface"
-  subnet_ids = ["${aws_subnet.vpc-2-sub-a.id}","${aws_subnet.vpc-2-sub-b.id}"]
+  subnet_ids        = ["${aws_subnet.vpc-2-sub-a.id}", "${aws_subnet.vpc-2-sub-b.id}"]
 
   security_group_ids = [
     "${aws_security_group.sec-group-vpc-2-endpoint.id}",
@@ -276,7 +280,7 @@ resource "aws_vpc_endpoint" "ec2messages3" {
   vpc_id            = "${aws_vpc.vpc-3.id}"
   service_name      = "com.amazonaws.${var.region}.ec2messages"
   vpc_endpoint_type = "Interface"
-  subnet_ids = ["${aws_subnet.vpc-3-sub-a.id}","${aws_subnet.vpc-3-sub-b.id}"]
+  subnet_ids        = ["${aws_subnet.vpc-3-sub-a.id}", "${aws_subnet.vpc-3-sub-b.id}"]
 
   security_group_ids = [
     "${aws_security_group.sec-group-vpc-3-endpoint.id}",
@@ -289,7 +293,7 @@ resource "aws_vpc_endpoint" "ec2messages4" {
   vpc_id            = "${aws_vpc.vpc-4.id}"
   service_name      = "com.amazonaws.${var.region}.ec2messages"
   vpc_endpoint_type = "Interface"
-  subnet_ids = ["${aws_subnet.vpc-4-sub-a.id}","${aws_subnet.vpc-4-sub-b.id}"]
+  subnet_ids        = ["${aws_subnet.vpc-4-sub-a.id}", "${aws_subnet.vpc-4-sub-b.id}"]
 
   security_group_ids = [
     "${aws_security_group.sec-group-vpc-4-endpoint.id}",
@@ -323,7 +327,6 @@ resource "aws_main_route_table_association" "main-rt-vpc-4" {
   route_table_id = "${aws_route_table.vpc-4-rtb.id}"
 }
 
-
 # Route Tables
 ## Usually unecessary to explicitly create a Route Table in Terraform
 ## since AWS automatically creates and assigns a 'Main Route Table'
@@ -335,15 +338,16 @@ resource "aws_route_table" "vpc-1-rtb" {
   vpc_id = "${aws_vpc.vpc-1.id}"
 
   route {
-    cidr_block = "10.0.0.0/8"
+    cidr_block         = "10.0.0.0/8"
     transit_gateway_id = "${aws_ec2_transit_gateway.test-tgw.id}"
   }
 
   tags = {
-    Name       = "vpc-1-rtb"
-    env        = "dev"
+    Name     = "vpc-1-rtb"
+    env      = "dev"
     scenario = "${var.scenario}"
   }
+
   depends_on = ["aws_ec2_transit_gateway.test-tgw"]
 }
 
@@ -351,15 +355,16 @@ resource "aws_route_table" "vpc-2-rtb" {
   vpc_id = "${aws_vpc.vpc-2.id}"
 
   route {
-    cidr_block = "10.0.0.0/8"
+    cidr_block         = "10.0.0.0/8"
     transit_gateway_id = "${aws_ec2_transit_gateway.test-tgw.id}"
   }
 
   tags = {
-    Name       = "vpc-2-rtb"
-    env        = "dev"
+    Name     = "vpc-2-rtb"
+    env      = "dev"
     scenario = "${var.scenario}"
   }
+
   depends_on = ["aws_ec2_transit_gateway.test-tgw"]
 }
 
@@ -367,7 +372,7 @@ resource "aws_route_table" "vpc-3-rtb" {
   vpc_id = "${aws_vpc.vpc-3.id}"
 
   route {
-    cidr_block = "10.0.0.0/8"
+    cidr_block         = "10.0.0.0/8"
     transit_gateway_id = "${aws_ec2_transit_gateway.test-tgw.id}"
   }
 
@@ -377,10 +382,11 @@ resource "aws_route_table" "vpc-3-rtb" {
   }
 
   tags = {
-    Name       = "vpc-3-rtb"
-    env        = "shared"
+    Name     = "vpc-3-rtb"
+    env      = "shared"
     scenario = "${var.scenario}"
   }
+
   depends_on = ["aws_ec2_transit_gateway.test-tgw"]
 }
 
@@ -388,18 +394,18 @@ resource "aws_route_table" "vpc-4-rtb" {
   vpc_id = "${aws_vpc.vpc-4.id}"
 
   route {
-    cidr_block = "10.0.0.0/8"
+    cidr_block         = "10.0.0.0/8"
     transit_gateway_id = "${aws_ec2_transit_gateway.test-tgw.id}"
   }
 
   tags = {
-    Name       = "vpc-4-rtb"
-    env        = "prod"
+    Name     = "vpc-4-rtb"
+    env      = "prod"
     scenario = "${var.scenario}"
   }
+
   depends_on = ["aws_ec2_transit_gateway.test-tgw"]
 }
-
 
 ###########################
 # Transit Gateway Section #
@@ -416,63 +422,72 @@ resource "aws_ec2_transit_gateway" "test-tgw" {
   description                     = "Transit Gateway testing scenario with 4 VPCs, 2 subnets each"
   default_route_table_association = "disable"
   default_route_table_propagation = "disable"
-  tags                            = {
-    Name                          = "${var.scenario}"
-    scenario                      = "${var.scenario}"
+
+  tags = {
+    Name     = "${var.scenario}"
+    scenario = "${var.scenario}"
   }
 }
 
 # VPC attachment
 
 resource "aws_ec2_transit_gateway_vpc_attachment" "tgw-att-vpc-1" {
-  subnet_ids         = ["${aws_subnet.vpc-1-sub-a.id}", "${aws_subnet.vpc-1-sub-b.id}"]
-  transit_gateway_id = "${aws_ec2_transit_gateway.test-tgw.id}"
-  vpc_id             = "${aws_vpc.vpc-1.id}"
+  subnet_ids                                      = ["${aws_subnet.vpc-1-sub-a.id}", "${aws_subnet.vpc-1-sub-b.id}"]
+  transit_gateway_id                              = "${aws_ec2_transit_gateway.test-tgw.id}"
+  vpc_id                                          = "${aws_vpc.vpc-1.id}"
   transit_gateway_default_route_table_association = false
   transit_gateway_default_route_table_propagation = false
-  tags               = {
-    Name             = "tgw-att-vpc1"
-    scenario         = "${var.scenario}"
+
+  tags = {
+    Name     = "tgw-att-vpc1"
+    scenario = "${var.scenario}"
   }
+
   depends_on = ["aws_ec2_transit_gateway.test-tgw"]
 }
 
 resource "aws_ec2_transit_gateway_vpc_attachment" "tgw-att-vpc-2" {
-  subnet_ids         = ["${aws_subnet.vpc-2-sub-a.id}", "${aws_subnet.vpc-2-sub-b.id}"]
-  transit_gateway_id = "${aws_ec2_transit_gateway.test-tgw.id}"
-  vpc_id             = "${aws_vpc.vpc-2.id}"
+  subnet_ids                                      = ["${aws_subnet.vpc-2-sub-a.id}", "${aws_subnet.vpc-2-sub-b.id}"]
+  transit_gateway_id                              = "${aws_ec2_transit_gateway.test-tgw.id}"
+  vpc_id                                          = "${aws_vpc.vpc-2.id}"
   transit_gateway_default_route_table_association = false
   transit_gateway_default_route_table_propagation = false
-  tags               = {
-    Name             = "tgw-att-vpc2"
-    scenario         = "${var.scenario}"
+
+  tags = {
+    Name     = "tgw-att-vpc2"
+    scenario = "${var.scenario}"
   }
+
   depends_on = ["aws_ec2_transit_gateway.test-tgw"]
 }
 
 resource "aws_ec2_transit_gateway_vpc_attachment" "tgw-att-vpc-3" {
-  subnet_ids         = ["${aws_subnet.vpc-3-sub-a.id}", "${aws_subnet.vpc-3-sub-b.id}"]
-  transit_gateway_id = "${aws_ec2_transit_gateway.test-tgw.id}"
-  vpc_id             = "${aws_vpc.vpc-3.id}"
+  subnet_ids                                      = ["${aws_subnet.vpc-3-sub-a.id}", "${aws_subnet.vpc-3-sub-b.id}"]
+  transit_gateway_id                              = "${aws_ec2_transit_gateway.test-tgw.id}"
+  vpc_id                                          = "${aws_vpc.vpc-3.id}"
   transit_gateway_default_route_table_association = false
   transit_gateway_default_route_table_propagation = false
-  tags               = {
-    Name             = "tgw-att-vpc3"
-    scenario         = "${var.scenario}"
+
+  tags = {
+    Name     = "tgw-att-vpc3"
+    scenario = "${var.scenario}"
   }
+
   depends_on = ["aws_ec2_transit_gateway.test-tgw"]
 }
 
 resource "aws_ec2_transit_gateway_vpc_attachment" "tgw-att-vpc-4" {
-  subnet_ids         = ["${aws_subnet.vpc-4-sub-a.id}", "${aws_subnet.vpc-4-sub-b.id}"]
-  transit_gateway_id = "${aws_ec2_transit_gateway.test-tgw.id}"
-  vpc_id             = "${aws_vpc.vpc-4.id}"
+  subnet_ids                                      = ["${aws_subnet.vpc-4-sub-a.id}", "${aws_subnet.vpc-4-sub-b.id}"]
+  transit_gateway_id                              = "${aws_ec2_transit_gateway.test-tgw.id}"
+  vpc_id                                          = "${aws_vpc.vpc-4.id}"
   transit_gateway_default_route_table_association = false
   transit_gateway_default_route_table_propagation = false
-  tags               = {
-    Name             = "tgw-att-vpc4"
-    scenario         = "${var.scenario}"
+
+  tags = {
+    Name     = "tgw-att-vpc4"
+    scenario = "${var.scenario}"
   }
+
   depends_on = ["aws_ec2_transit_gateway.test-tgw"]
 }
 
@@ -480,28 +495,34 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "tgw-att-vpc-4" {
 
 resource "aws_ec2_transit_gateway_route_table" "tgw-dev-rt" {
   transit_gateway_id = "${aws_ec2_transit_gateway.test-tgw.id}"
-  tags               = {
-    Name             = "tgw-dev-rt"
-    scenario         = "${var.scenario}"
+
+  tags = {
+    Name     = "tgw-dev-rt"
+    scenario = "${var.scenario}"
   }
+
   depends_on = ["aws_ec2_transit_gateway.test-tgw"]
 }
 
 resource "aws_ec2_transit_gateway_route_table" "tgw-shared-rt" {
   transit_gateway_id = "${aws_ec2_transit_gateway.test-tgw.id}"
-  tags               = {
-    Name             = "tgw-shared-rt"
-    scenario         = "${var.scenario}"
+
+  tags = {
+    Name     = "tgw-shared-rt"
+    scenario = "${var.scenario}"
   }
+
   depends_on = ["aws_ec2_transit_gateway.test-tgw"]
 }
 
 resource "aws_ec2_transit_gateway_route_table" "tgw-prod-rt" {
   transit_gateway_id = "${aws_ec2_transit_gateway.test-tgw.id}"
-  tags               = {
-    Name             = "tgw-prod-rt"
-    scenario         = "${var.scenario}"
+
+  tags = {
+    Name     = "tgw-prod-rt"
+    scenario = "${var.scenario}"
   }
+
   depends_on = ["aws_ec2_transit_gateway.test-tgw"]
 }
 
@@ -543,6 +564,7 @@ resource "aws_ec2_transit_gateway_route_table_propagation" "tgw-rt-dev-to-vpc-2"
   transit_gateway_attachment_id  = "${aws_ec2_transit_gateway_vpc_attachment.tgw-att-vpc-2.id}"
   transit_gateway_route_table_id = "${aws_ec2_transit_gateway_route_table.tgw-dev-rt.id}"
 }
+
 resource "aws_ec2_transit_gateway_route_table_propagation" "tgw-rt-dev-to-vpc-3" {
   transit_gateway_attachment_id  = "${aws_ec2_transit_gateway_vpc_attachment.tgw-att-vpc-3.id}"
   transit_gateway_route_table_id = "${aws_ec2_transit_gateway_route_table.tgw-dev-rt.id}"
@@ -592,15 +614,16 @@ resource "aws_security_group" "sec-group-vpc-1-endpoint" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
   egress {
-    from_port       = 0
-    to_port         = 0
-    protocol        = "-1"
-    cidr_blocks     = ["0.0.0.0/0"]
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = {
-    Name = "sec-group-vpc-1-endpoint"
+    Name     = "sec-group-vpc-1-endpoint"
     scenario = "${var.scenario}"
   }
 }
@@ -616,15 +639,16 @@ resource "aws_security_group" "sec-group-vpc-2-endpoint" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
   egress {
-    from_port       = 0
-    to_port         = 0
-    protocol        = "-1"
-    cidr_blocks     = ["0.0.0.0/0"]
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = {
-    Name = "sec-group-vpc-2-endpoint"
+    Name     = "sec-group-vpc-2-endpoint"
     scenario = "${var.scenario}"
   }
 }
@@ -640,15 +664,16 @@ resource "aws_security_group" "sec-group-vpc-3-endpoint" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
   egress {
-    from_port       = 0
-    to_port         = 0
-    protocol        = "-1"
-    cidr_blocks     = ["0.0.0.0/0"]
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = {
-    Name = "sec-group-vpc-3-endpoint"
+    Name     = "sec-group-vpc-3-endpoint"
     scenario = "${var.scenario}"
   }
 }
@@ -664,15 +689,16 @@ resource "aws_security_group" "sec-group-vpc-4-endpoint" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
   egress {
-    from_port       = 0
-    to_port         = 0
-    protocol        = "-1"
-    cidr_blocks     = ["0.0.0.0/0"]
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = {
-    Name = "sec-group-vpc-4-endpoint"
+    Name     = "sec-group-vpc-4-endpoint"
     scenario = "${var.scenario}"
   }
 }
@@ -692,28 +718,28 @@ resource "aws_security_group" "sec-group-vpc-1-ssh-icmp" {
   }
 
   ingress {
-    from_port   = 8 # the ICMP type number for 'Echo'
-    to_port     = 0 # the ICMP code
+    from_port   = 8             # the ICMP type number for 'Echo'
+    to_port     = 0             # the ICMP code
     protocol    = "icmp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
   ingress {
-    from_port   = 0 # the ICMP type number for 'Echo Reply'
-    to_port     = 0 # the ICMP code
+    from_port   = 0             # the ICMP type number for 'Echo Reply'
+    to_port     = 0             # the ICMP code
     protocol    = "icmp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
-    from_port       = 0
-    to_port         = 0
-    protocol        = "-1"
-    cidr_blocks     = ["0.0.0.0/0"]
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = {
-    Name = "sec-group-vpc-1-ssh-icmp"
+    Name     = "sec-group-vpc-1-ssh-icmp"
     scenario = "${var.scenario}"
   }
 }
@@ -731,28 +757,28 @@ resource "aws_security_group" "sec-group-vpc-2-ssh-icmp" {
   }
 
   ingress {
-    from_port   = 8 # the ICMP type number for 'Echo'
-    to_port     = 0 # the ICMP code
+    from_port   = 8             # the ICMP type number for 'Echo'
+    to_port     = 0             # the ICMP code
     protocol    = "icmp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
   ingress {
-    from_port   = 0 # the ICMP type number for 'Echo Reply'
-    to_port     = 0 # the ICMP code
+    from_port   = 0             # the ICMP type number for 'Echo Reply'
+    to_port     = 0             # the ICMP code
     protocol    = "icmp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
-    from_port       = 0
-    to_port         = 0
-    protocol        = "-1"
-    cidr_blocks     = ["0.0.0.0/0"]
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = {
-    Name = "sec-group-vpc-2-ssh-icmp"
+    Name     = "sec-group-vpc-2-ssh-icmp"
     scenario = "${var.scenario}"
   }
 }
@@ -770,28 +796,28 @@ resource "aws_security_group" "sec-group-vpc-3-ssh-icmp" {
   }
 
   ingress {
-    from_port   = 8 # the ICMP type number for 'Echo'
-    to_port     = 0 # the ICMP code
+    from_port   = 8             # the ICMP type number for 'Echo'
+    to_port     = 0             # the ICMP code
     protocol    = "icmp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
   ingress {
-    from_port   = 0 # the ICMP type number for 'Echo Reply'
-    to_port     = 0 # the ICMP code
+    from_port   = 0             # the ICMP type number for 'Echo Reply'
+    to_port     = 0             # the ICMP code
     protocol    = "icmp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
-    from_port       = 0
-    to_port         = 0
-    protocol        = "-1"
-    cidr_blocks     = ["0.0.0.0/0"]
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = {
-    Name = "sec-group-vpc-3-ssh-icmp"
+    Name     = "sec-group-vpc-3-ssh-icmp"
     scenario = "${var.scenario}"
   }
 }
@@ -809,28 +835,28 @@ resource "aws_security_group" "sec-group-vpc-4-ssh-icmp" {
   }
 
   ingress {
-    from_port   = 8 # the ICMP type number for 'Echo'
-    to_port     = 0 # the ICMP code
+    from_port   = 8             # the ICMP type number for 'Echo'
+    to_port     = 0             # the ICMP code
     protocol    = "icmp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
   ingress {
-    from_port   = 0 # the ICMP type number for 'Echo Reply'
-    to_port     = 0 # the ICMP code
+    from_port   = 0             # the ICMP type number for 'Echo Reply'
+    to_port     = 0             # the ICMP code
     protocol    = "icmp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
-    from_port       = 0
-    to_port         = 0
-    protocol        = "-1"
-    cidr_blocks     = ["0.0.0.0/0"]
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = {
-    Name = "sec-group-vpc-4-ssh-icmp"
+    Name     = "sec-group-vpc-4-ssh-icmp"
     scenario = "${var.scenario}"
   }
 }
@@ -871,38 +897,38 @@ data "aws_ami" "amznlx2" {
 }
 
 resource "aws_instance" "test-tgw-instance1-dev" {
-  ami                         = "${data.aws_ami.amznlx2.id}"
-  instance_type               = "t3.medium"
-  subnet_id                   = "${aws_subnet.vpc-1-sub-a.id}"
-  vpc_security_group_ids     = [ "${aws_security_group.sec-group-vpc-1-ssh-icmp.id}" ]
-  key_name                    = "${aws_key_pair.test-tgw-keypair.key_name}"
-  private_ip                  = "10.10.1.10"
-  iam_instance_profile        = "${aws_iam_instance_profile.managed-instance.name}"
+  ami                    = "${data.aws_ami.amznlx2.id}"
+  instance_type          = "t3.medium"
+  subnet_id              = "${aws_subnet.vpc-1-sub-a.id}"
+  vpc_security_group_ids = ["${aws_security_group.sec-group-vpc-1-ssh-icmp.id}"]
+  key_name               = "${aws_key_pair.test-tgw-keypair.key_name}"
+  private_ip             = "10.10.1.10"
+  iam_instance_profile   = "${aws_iam_instance_profile.managed-instance.name}"
 
   tags = {
-    Name = "test-tgw-instance1-dev"
-    scenario    = "${var.scenario}"
-    env         = "dev"
-    az          = "${var.az1}"
-    vpc         = "1"
+    Name     = "test-tgw-instance1-dev"
+    scenario = "${var.scenario}"
+    env      = "dev"
+    az       = "${var.az1}"
+    vpc      = "1"
   }
 }
 
 resource "aws_instance" "test-tgw-instance2-dev" {
-  ami                         = "${data.aws_ami.amznlx2.id}"
-  instance_type               = "t3.medium"
-  subnet_id                   = "${aws_subnet.vpc-2-sub-a.id}"
-  vpc_security_group_ids     = [ "${aws_security_group.sec-group-vpc-2-ssh-icmp.id}" ]
-  key_name                    = "${aws_key_pair.test-tgw-keypair.key_name}"
-  private_ip                  = "10.11.1.10"
-  iam_instance_profile        = "${aws_iam_instance_profile.managed-instance.name}"
+  ami                    = "${data.aws_ami.amznlx2.id}"
+  instance_type          = "t3.medium"
+  subnet_id              = "${aws_subnet.vpc-2-sub-a.id}"
+  vpc_security_group_ids = ["${aws_security_group.sec-group-vpc-2-ssh-icmp.id}"]
+  key_name               = "${aws_key_pair.test-tgw-keypair.key_name}"
+  private_ip             = "10.11.1.10"
+  iam_instance_profile   = "${aws_iam_instance_profile.managed-instance.name}"
 
   tags = {
-    Name = "test-tgw-instance2-dev"
-    scenario    = "${var.scenario}"
-    env         = "dev"
-    az          = "${var.az1}"
-    vpc         = "2"
+    Name     = "test-tgw-instance2-dev"
+    scenario = "${var.scenario}"
+    env      = "dev"
+    az       = "${var.az1}"
+    vpc      = "2"
   }
 }
 
@@ -910,39 +936,38 @@ resource "aws_instance" "test-tgw-instance3-shared" {
   ami                         = "${data.aws_ami.amznlx2.id}"
   instance_type               = "t3.medium"
   subnet_id                   = "${aws_subnet.vpc-3-sub-a.id}"
-  vpc_security_group_ids     = [ "${aws_security_group.sec-group-vpc-3-ssh-icmp.id}" ]
+  vpc_security_group_ids      = ["${aws_security_group.sec-group-vpc-3-ssh-icmp.id}"]
   key_name                    = "${aws_key_pair.test-tgw-keypair.key_name}"
   private_ip                  = "10.12.1.10"
   associate_public_ip_address = false
   iam_instance_profile        = "${aws_iam_instance_profile.managed-instance.name}"
 
   tags = {
-    Name = "test-tgw-instance3-shared"
-    scenario    = "${var.scenario}"
-    env         = "shared"
-    az          = "${var.az1}"
-    vpc         = "3"
+    Name     = "test-tgw-instance3-shared"
+    scenario = "${var.scenario}"
+    env      = "shared"
+    az       = "${var.az1}"
+    vpc      = "3"
   }
 }
 
 resource "aws_instance" "test-tgw-instance4-prod" {
-  ami                         = "${data.aws_ami.amznlx2.id}"
-  instance_type               = "t3.medium"
-  subnet_id                   = "${aws_subnet.vpc-4-sub-a.id}"
-  vpc_security_group_ids      = [ "${aws_security_group.sec-group-vpc-4-ssh-icmp.id}" ]
-  key_name                    = "${aws_key_pair.test-tgw-keypair.key_name}"
-  private_ip                  = "10.13.1.10"
-  iam_instance_profile        = "${aws_iam_instance_profile.managed-instance.name}"
+  ami                    = "${data.aws_ami.amznlx2.id}"
+  instance_type          = "t3.medium"
+  subnet_id              = "${aws_subnet.vpc-4-sub-a.id}"
+  vpc_security_group_ids = ["${aws_security_group.sec-group-vpc-4-ssh-icmp.id}"]
+  key_name               = "${aws_key_pair.test-tgw-keypair.key_name}"
+  private_ip             = "10.13.1.10"
+  iam_instance_profile   = "${aws_iam_instance_profile.managed-instance.name}"
 
   tags = {
-    Name = "test-tgw-instance4-prod"
-    scenario    = "${var.scenario}"
-    env         = "prod"
-    az          = "${var.az1}"
-    vpc         = "4"
+    Name     = "test-tgw-instance4-prod"
+    scenario = "${var.scenario}"
+    env      = "prod"
+    az       = "${var.az1}"
+    vpc      = "4"
   }
 }
-
 
 ############
 # IAM Role #
@@ -952,17 +977,20 @@ data "aws_iam_policy_document" "assume-role-ec2-ssm" {
   statement {
     actions = ["sts:AssumeRole"]
     effect  = "Allow"
+
     principals {
       type        = "Service"
       identifiers = ["ec2.amazonaws.com", "ssm.amazonaws.com"]
     }
   }
 }
+
 resource "aws_iam_role" "managed-instance" {
   name               = "ECManagedSSMRole"
   description        = "Provides EC2 SSM role and SSM full access to EC2 services."
   assume_role_policy = "${data.aws_iam_policy_document.assume-role-ec2-ssm.json}"
 }
+
 resource "aws_iam_instance_profile" "managed-instance" {
   name = "${aws_iam_role.managed-instance.name}"
   role = "${aws_iam_role.managed-instance.name}"
@@ -977,4 +1005,6 @@ resource "aws_iam_role_policy_attachment" "ssm_attach" {
 # Outputs #
 ###########
 
+
 # output "PUBLIC_IP" { value = "${aws_instance.test-tgw-instance3-shared.public_ip}" }
+
