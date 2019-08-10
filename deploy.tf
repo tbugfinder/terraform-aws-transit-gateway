@@ -6,6 +6,8 @@
 
 resource "aws_vpc" "vpc-1" {
   cidr_block = "10.10.0.0/16"
+  enable_dns_support = true
+  enable_dns_hostnames = true
   tags = {
     Name = "${var.scenario}-vpc1-dev"
     scenario = "${var.scenario}"
@@ -15,6 +17,8 @@ resource "aws_vpc" "vpc-1" {
 
 resource "aws_vpc" "vpc-2" {
   cidr_block = "10.11.0.0/16"
+  enable_dns_support = true
+  enable_dns_hostnames = true
   tags = {
     Name = "${var.scenario}-vpc2-dev"
     scenario = "${var.scenario}"
@@ -24,6 +28,8 @@ resource "aws_vpc" "vpc-2" {
 
 resource "aws_vpc" "vpc-3" {
   cidr_block = "10.12.0.0/16"
+  enable_dns_support = true
+  enable_dns_hostnames = true
   tags = {
     Name = "${var.scenario}-vpc3-shared"
     scenario = "${var.scenario}"
@@ -33,6 +39,8 @@ resource "aws_vpc" "vpc-3" {
 
 resource "aws_vpc" "vpc-4" {
   cidr_block = "10.13.0.0/16"
+  enable_dns_support = true
+  enable_dns_hostnames = true
   tags = {
     Name = "${var.scenario}-vpc4-prod"
     scenario = "${var.scenario}"
@@ -131,6 +139,163 @@ resource "aws_internet_gateway" "vpc-3-igw" {
     Name = "vpc-3-igw"
     scenario = "${var.scenario}"
   }
+}
+
+# VPC Endpoints for SSM
+resource "aws_vpc_endpoint" "ssm1" {
+  vpc_id            = "${aws_vpc.vpc-1.id}"
+  service_name      = "com.amazonaws.${var.region}.ssm"
+  vpc_endpoint_type = "Interface"
+  subnet_ids = ["${aws_subnet.vpc-1-sub-a.id}","${aws_subnet.vpc-1-sub-b.id}"]
+
+  security_group_ids = [
+    "${aws_security_group.sec-group-vpc-1-endpoint.id}",
+  ]
+
+  private_dns_enabled = true
+}
+
+resource "aws_vpc_endpoint" "ssm2" {
+  vpc_id            = "${aws_vpc.vpc-2.id}"
+  service_name      = "com.amazonaws.${var.region}.ssm"
+  vpc_endpoint_type = "Interface"
+  subnet_ids = ["${aws_subnet.vpc-2-sub-a.id}","${aws_subnet.vpc-2-sub-b.id}"]
+
+  security_group_ids = [
+    "${aws_security_group.sec-group-vpc-2-endpoint.id}",
+  ]
+
+  private_dns_enabled = true
+}
+
+resource "aws_vpc_endpoint" "ssm3" {
+  vpc_id            = "${aws_vpc.vpc-3.id}"
+  service_name      = "com.amazonaws.${var.region}.ssm"
+  vpc_endpoint_type = "Interface"
+  subnet_ids = ["${aws_subnet.vpc-3-sub-a.id}","${aws_subnet.vpc-3-sub-b.id}"]
+
+  security_group_ids = [
+    "${aws_security_group.sec-group-vpc-3-endpoint.id}",
+  ]
+
+  private_dns_enabled = true
+}
+
+resource "aws_vpc_endpoint" "ssm4" {
+  vpc_id            = "${aws_vpc.vpc-4.id}"
+  service_name      = "com.amazonaws.${var.region}.ssm"
+  vpc_endpoint_type = "Interface"
+  subnet_ids = ["${aws_subnet.vpc-4-sub-a.id}","${aws_subnet.vpc-4-sub-b.id}"]
+
+  security_group_ids = [
+    "${aws_security_group.sec-group-vpc-4-endpoint.id}",
+  ]
+
+  private_dns_enabled = true
+}
+
+resource "aws_vpc_endpoint" "ssmmessages1" {
+  vpc_id            = "${aws_vpc.vpc-1.id}"
+  service_name      = "com.amazonaws.${var.region}.ssmmessages"
+  vpc_endpoint_type = "Interface"
+  subnet_ids = ["${aws_subnet.vpc-1-sub-a.id}","${aws_subnet.vpc-1-sub-b.id}"]
+
+  security_group_ids = [
+    "${aws_security_group.sec-group-vpc-1-endpoint.id}",
+  ]
+
+  private_dns_enabled = true
+}
+
+resource "aws_vpc_endpoint" "ssmmessages2" {
+  vpc_id            = "${aws_vpc.vpc-2.id}"
+  service_name      = "com.amazonaws.${var.region}.ssmmessages"
+  vpc_endpoint_type = "Interface"
+  subnet_ids = ["${aws_subnet.vpc-2-sub-a.id}","${aws_subnet.vpc-2-sub-b.id}"]
+
+  security_group_ids = [
+    "${aws_security_group.sec-group-vpc-2-endpoint.id}",
+  ]
+
+  private_dns_enabled = true
+}
+
+resource "aws_vpc_endpoint" "ssmmessages3" {
+  vpc_id            = "${aws_vpc.vpc-3.id}"
+  service_name      = "com.amazonaws.${var.region}.ssmmessages"
+  vpc_endpoint_type = "Interface"
+  subnet_ids = ["${aws_subnet.vpc-3-sub-a.id}","${aws_subnet.vpc-3-sub-b.id}"]
+
+  security_group_ids = [
+    "${aws_security_group.sec-group-vpc-3-endpoint.id}",
+  ]
+
+  private_dns_enabled = true
+}
+
+resource "aws_vpc_endpoint" "ssmmessages4" {
+  vpc_id            = "${aws_vpc.vpc-4.id}"
+  service_name      = "com.amazonaws.${var.region}.ssmmessages"
+  vpc_endpoint_type = "Interface"
+  subnet_ids = ["${aws_subnet.vpc-4-sub-a.id}","${aws_subnet.vpc-4-sub-b.id}"]
+
+  security_group_ids = [
+    "${aws_security_group.sec-group-vpc-4-endpoint.id}",
+  ]
+
+  private_dns_enabled = true
+}
+
+resource "aws_vpc_endpoint" "ec2messages1" {
+  vpc_id            = "${aws_vpc.vpc-1.id}"
+  service_name      = "com.amazonaws.${var.region}.ec2messages"
+  vpc_endpoint_type = "Interface"
+  subnet_ids = ["${aws_subnet.vpc-1-sub-a.id}","${aws_subnet.vpc-1-sub-b.id}"]
+
+  security_group_ids = [
+    "${aws_security_group.sec-group-vpc-1-endpoint.id}",
+  ]
+
+  private_dns_enabled = true
+}
+
+resource "aws_vpc_endpoint" "ec2messages2" {
+  vpc_id            = "${aws_vpc.vpc-2.id}"
+  service_name      = "com.amazonaws.${var.region}.ec2messages"
+  vpc_endpoint_type = "Interface"
+  subnet_ids = ["${aws_subnet.vpc-2-sub-a.id}","${aws_subnet.vpc-2-sub-b.id}"]
+
+  security_group_ids = [
+    "${aws_security_group.sec-group-vpc-2-endpoint.id}",
+  ]
+
+  private_dns_enabled = true
+}
+
+resource "aws_vpc_endpoint" "ec2messages3" {
+  vpc_id            = "${aws_vpc.vpc-3.id}"
+  service_name      = "com.amazonaws.${var.region}.ec2messages"
+  vpc_endpoint_type = "Interface"
+  subnet_ids = ["${aws_subnet.vpc-3-sub-a.id}","${aws_subnet.vpc-3-sub-b.id}"]
+
+  security_group_ids = [
+    "${aws_security_group.sec-group-vpc-3-endpoint.id}",
+  ]
+
+  private_dns_enabled = true
+}
+
+resource "aws_vpc_endpoint" "ec2messages4" {
+  vpc_id            = "${aws_vpc.vpc-4.id}"
+  service_name      = "com.amazonaws.${var.region}.ec2messages"
+  vpc_endpoint_type = "Interface"
+  subnet_ids = ["${aws_subnet.vpc-4-sub-a.id}","${aws_subnet.vpc-4-sub-b.id}"]
+
+  security_group_ids = [
+    "${aws_security_group.sec-group-vpc-4-endpoint.id}",
+  ]
+
+  private_dns_enabled = true
 }
 
 # Main Route Tables Associations
@@ -415,6 +580,103 @@ resource "aws_key_pair" "test-tgw-keypair" {
 }
 
 # Security Groups
+## for Endpoints
+resource "aws_security_group" "sec-group-vpc-1-endpoint" {
+  name        = "sec-group-vpc-1-endpoint"
+  description = "test-tgw: any traffic to endpoint"
+  vpc_id      = "${aws_vpc.vpc-1.id}"
+
+  ingress {
+    from_port   = 0
+    to_port     = 65535
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    from_port       = 0
+    to_port         = 0
+    protocol        = "-1"
+    cidr_blocks     = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "sec-group-vpc-1-endpoint"
+    scenario = "${var.scenario}"
+  }
+}
+
+resource "aws_security_group" "sec-group-vpc-2-endpoint" {
+  name        = "sec-group-vpc-2-endpoint"
+  description = "test-tgw: any traffic to endpoint"
+  vpc_id      = "${aws_vpc.vpc-2.id}"
+
+  ingress {
+    from_port   = 0
+    to_port     = 65535
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    from_port       = 0
+    to_port         = 0
+    protocol        = "-1"
+    cidr_blocks     = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "sec-group-vpc-2-endpoint"
+    scenario = "${var.scenario}"
+  }
+}
+
+resource "aws_security_group" "sec-group-vpc-3-endpoint" {
+  name        = "sec-group-vpc-3-endpoint"
+  description = "test-tgw: any traffic to endpoint"
+  vpc_id      = "${aws_vpc.vpc-3.id}"
+
+  ingress {
+    from_port   = 0
+    to_port     = 65535
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    from_port       = 0
+    to_port         = 0
+    protocol        = "-1"
+    cidr_blocks     = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "sec-group-vpc-3-endpoint"
+    scenario = "${var.scenario}"
+  }
+}
+
+resource "aws_security_group" "sec-group-vpc-4-endpoint" {
+  name        = "sec-group-vpc-4-endpoint"
+  description = "test-tgw: any traffic to endpoint"
+  vpc_id      = "${aws_vpc.vpc-4.id}"
+
+  ingress {
+    from_port   = 0
+    to_port     = 65535
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    from_port       = 0
+    to_port         = 0
+    protocol        = "-1"
+    cidr_blocks     = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "sec-group-vpc-4-endpoint"
+    scenario = "${var.scenario}"
+  }
+}
+
 ## Need to create 4 of them as our Security Groups are linked to a VPC
 
 resource "aws_security_group" "sec-group-vpc-1-ssh-icmp" {
@@ -592,13 +854,30 @@ data "aws_ami" "ubuntu" {
   owners = ["099720109477"] # Canonical
 }
 
+data "aws_ami" "amznlx2" {
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["*amzn2-ami-hvm-2*-x86_64-*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  owners = ["amazon"] # Amazon
+}
+
 resource "aws_instance" "test-tgw-instance1-dev" {
-  ami                         = "${data.aws_ami.ubuntu.id}"
-  instance_type               = "t2.micro"
+  ami                         = "${data.aws_ami.amznlx2.id}"
+  instance_type               = "t3.medium"
   subnet_id                   = "${aws_subnet.vpc-1-sub-a.id}"
   vpc_security_group_ids     = [ "${aws_security_group.sec-group-vpc-1-ssh-icmp.id}" ]
   key_name                    = "${aws_key_pair.test-tgw-keypair.key_name}"
   private_ip                  = "10.10.1.10"
+  iam_instance_profile        = "${aws_iam_instance_profile.managed-instance.name}"
 
   tags = {
     Name = "test-tgw-instance1-dev"
@@ -610,12 +889,13 @@ resource "aws_instance" "test-tgw-instance1-dev" {
 }
 
 resource "aws_instance" "test-tgw-instance2-dev" {
-  ami                         = "${data.aws_ami.ubuntu.id}"
-  instance_type               = "t2.micro"
+  ami                         = "${data.aws_ami.amznlx2.id}"
+  instance_type               = "t3.medium"
   subnet_id                   = "${aws_subnet.vpc-2-sub-a.id}"
   vpc_security_group_ids     = [ "${aws_security_group.sec-group-vpc-2-ssh-icmp.id}" ]
   key_name                    = "${aws_key_pair.test-tgw-keypair.key_name}"
   private_ip                  = "10.11.1.10"
+  iam_instance_profile        = "${aws_iam_instance_profile.managed-instance.name}"
 
   tags = {
     Name = "test-tgw-instance2-dev"
@@ -627,13 +907,14 @@ resource "aws_instance" "test-tgw-instance2-dev" {
 }
 
 resource "aws_instance" "test-tgw-instance3-shared" {
-  ami                         = "${data.aws_ami.ubuntu.id}"
-  instance_type               = "t2.micro"
+  ami                         = "${data.aws_ami.amznlx2.id}"
+  instance_type               = "t3.medium"
   subnet_id                   = "${aws_subnet.vpc-3-sub-a.id}"
   vpc_security_group_ids     = [ "${aws_security_group.sec-group-vpc-3-ssh-icmp.id}" ]
   key_name                    = "${aws_key_pair.test-tgw-keypair.key_name}"
   private_ip                  = "10.12.1.10"
-  associate_public_ip_address = true
+  associate_public_ip_address = false
+  iam_instance_profile        = "${aws_iam_instance_profile.managed-instance.name}"
 
   tags = {
     Name = "test-tgw-instance3-shared"
@@ -645,12 +926,13 @@ resource "aws_instance" "test-tgw-instance3-shared" {
 }
 
 resource "aws_instance" "test-tgw-instance4-prod" {
-  ami                         = "${data.aws_ami.ubuntu.id}"
-  instance_type               = "t2.micro"
+  ami                         = "${data.aws_ami.amznlx2.id}"
+  instance_type               = "t3.medium"
   subnet_id                   = "${aws_subnet.vpc-4-sub-a.id}"
-  vpc_security_group_ids     = [ "${aws_security_group.sec-group-vpc-4-ssh-icmp.id}" ]
+  vpc_security_group_ids      = [ "${aws_security_group.sec-group-vpc-4-ssh-icmp.id}" ]
   key_name                    = "${aws_key_pair.test-tgw-keypair.key_name}"
   private_ip                  = "10.13.1.10"
+  iam_instance_profile        = "${aws_iam_instance_profile.managed-instance.name}"
 
   tags = {
     Name = "test-tgw-instance4-prod"
@@ -661,8 +943,38 @@ resource "aws_instance" "test-tgw-instance4-prod" {
   }
 }
 
+
+############
+# IAM Role #
+############
+# IAM Role: BI-ManagedInstanceRole
+data "aws_iam_policy_document" "assume-role-ec2-ssm" {
+  statement {
+    actions = ["sts:AssumeRole"]
+    effect  = "Allow"
+    principals {
+      type        = "Service"
+      identifiers = ["ec2.amazonaws.com", "ssm.amazonaws.com"]
+    }
+  }
+}
+resource "aws_iam_role" "managed-instance" {
+  name               = "ECManagedSSMRole"
+  description        = "Provides EC2 SSM role and SSM full access to EC2 services."
+  assume_role_policy = "${data.aws_iam_policy_document.assume-role-ec2-ssm.json}"
+}
+resource "aws_iam_instance_profile" "managed-instance" {
+  name = "${aws_iam_role.managed-instance.name}"
+  role = "${aws_iam_role.managed-instance.name}"
+}
+
+resource "aws_iam_role_policy_attachment" "ssm_attach" {
+  role       = "${aws_iam_role.managed-instance.name}"
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
+}
+
 ###########
 # Outputs #
 ###########
 
-output "PUBLIC_IP" { value = "${aws_instance.test-tgw-instance3-shared.public_ip}" }
+# output "PUBLIC_IP" { value = "${aws_instance.test-tgw-instance3-shared.public_ip}" }
