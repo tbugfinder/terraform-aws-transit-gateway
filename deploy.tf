@@ -1005,6 +1005,14 @@ resource "aws_iam_role_policy_attachment" "ssm_attach" {
 # Outputs #
 ###########
 
+output "t1_ping_prod_shared" {
+  value = "TESTCASE 1: prod instance ${aws_instance.test-tgw-instance4-prod.id} with (${aws_instance.test-tgw-instance4-prod.private_ip}) pings shared successfully: echo $(hostname -i) && ping ${aws_instance.test-tgw-instance3-shared.private_ip}"
+}
 
-# output "PUBLIC_IP" { value = "${aws_instance.test-tgw-instance3-shared.public_ip}" }
+output "t2_ping_dev_dev" {
+  value = "TESTCASE 2: prod instance ${aws_instance.test-tgw-instance1-dev.id} with (${aws_instance.test-tgw-instance1-dev.private_ip}) pings dev2 successfully: echo $(hostname -i) && ping ${aws_instance.test-tgw-instance2-dev.private_ip}"
+}
 
+output "t3_ping_prod_dev" {
+  value = "TESTCASE 3: prod instance ${aws_instance.test-tgw-instance4-prod.id} with (${aws_instance.test-tgw-instance4-prod.private_ip}) pings dev timing out: echo $(hostname -i) && ping ${aws_instance.test-tgw-instance1-dev.private_ip}"
+}
