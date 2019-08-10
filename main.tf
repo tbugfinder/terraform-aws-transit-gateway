@@ -426,6 +426,7 @@ resource "aws_route_table" "vpc-4-rtb" {
 ## The default setup being a full mesh scenario where all VPCs can see every other
 resource "aws_ec2_transit_gateway" "test-tgw" {
   description                     = "Transit Gateway testing scenario with 4 VPCs, 2 subnets each"
+  auto_accept_shared_attachments  = "enable"
   default_route_table_association = "disable"
   default_route_table_propagation = "disable"
 
